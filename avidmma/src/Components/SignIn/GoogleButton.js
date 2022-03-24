@@ -1,30 +1,23 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { Button } from '@mui/material'
-import { useDispatch } from 'react-redux'
 import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import { auth } from '../../firebase'
-import { login } from '../../features/User/user'
 import { useNavigate } from "react-router-dom";
+import useAuth from '../../Context/useAuth';
 
 
 
 const GoogleButton = () => {
-    const dispatch = useDispatch()
-    let navigate = useNavigate();
+
+    const navigate = useNavigate()
+
+    const { user, logIn, googleSignIn } = useAuth()
 
 
-    const signInWithGoogle = () => {
-        const provider = new GoogleAuthProvider();
-        signInWithPopup(auth, provider)
-            .then((res) => {
+    const signInWithGoogle = async () => {
+        googleSignIn()
+        navigate('/profile')
 
-                dispatch(login({ user: res.user }))
-                navigate('/profile')
-
-            })
-            .catch((err) => {
-                alert(err.message)
-            })
     }
 
 

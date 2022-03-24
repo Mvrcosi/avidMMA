@@ -1,7 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import Box from '@mui/material/Box';
-import { Paper } from '@mui/material'
+import { Paper,Box } from '@mui/material'
 
 const Logo = () => {
     return (

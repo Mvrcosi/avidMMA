@@ -2,27 +2,20 @@ import styled from 'styled-components'
 import React, { useEffect } from 'react'
 import EventContent from '../Events/EventContent'
 import ProfileSideBar from './ProfileSideBar'
-
-import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from "react-router-dom";
 
-import { selectUser } from '../../features/User/user'
-
+import useAuth from '../../Context/useAuth';
 
 const Profile = () => {
-
-  const user = useSelector(selectUser)
-  let navigate = useNavigate();
-
-
+  const navigate = useNavigate()
+  const { user, logIn } = useAuth()
 
 
   useEffect(() => {
     if (!user) {
-      navigate('/')
+      return navigate('/')
     }
-  }, [])
-
+  })
 
   return (
     <Container >
@@ -34,7 +27,6 @@ const Profile = () => {
 
 
 const Container = styled.div`
-
 display: flex;
 max-width: 1300px;
 margin-left: auto;

@@ -1,27 +1,30 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import styled from 'styled-components'
 import EventContent from '../Events/EventContent'
 import Sidebar from './SideBar'
-import { useSelector } from 'react-redux';
-import { selectUser } from '../../features/User/user'
+import useAuth from '../../Context/useAuth';
+import { useNavigate } from "react-router-dom";
+
 
 
 const Home = () => {
 
-    const user = useSelector(selectUser)
 
+    const navigate = useNavigate()
+    const { user } = useAuth()
 
-    
+    useEffect(() => {
+
+        if (user) {
+            navigate('/profile')
+        }
+    })
+
     return (
         <Container>
 
             {/* SIDE BAR */}
-            <Sidebar
-                logo='https://www.posenfoundation.co.il/wp-content/uploads/2019/02/logo-placeholder-png-3.png'
-                banner='Start Tracking Your Picks!'
-                joinBanner='Join Below'
-
-            />
+            <Sidebar />
 
             {/* EVENT CONTENT */}
             <EventContent />

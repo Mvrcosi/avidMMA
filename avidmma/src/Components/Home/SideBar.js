@@ -5,24 +5,19 @@ import TwitterButton from '../SignIn/TwitterButton'
 import EmailSignIn from '../SignIn/EmailSignIn'
 import EmailSignUp from '../SignIn/EmailSignUp'
 
-import { useSelector, useDispatch } from 'react-redux';
-import { selectUser } from '../../features/User/user'
 
 
 
 
-const Sidebar = ({ logo, banner }) => {
 
-
-    const user = useSelector(selectUser)
-    const dispatch = useDispatch()
+const Sidebar = () => {
 
     return (
         <Container sx={{ flex: '0.3' }}>
             <Paper sx={{ m: 2, display: 'flex', flexDirection: 'column' }}>
-                <img src={logo} />
+                <img src='https://www.posenfoundation.co.il/wp-content/uploads/2019/02/logo-placeholder-png-3.png' />
                 <Typography variant='overline' sx={{ textAlign: 'center', fontSize: '20px' }}>
-                    {banner}
+                    Start Tracking Your Picks!
                 </Typography>
 
                 <Divider sx={{ ml: 3, mr: 3 }}> <Typography variant='overline'>Join below</Typography></Divider>
