@@ -19,7 +19,6 @@ const ProfileSideBar = () => {
 
 
     const { user, logOut } = useAuth()
-    console.log(user)
 
     let userInfo = { ...user }
 

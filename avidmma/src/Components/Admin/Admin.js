@@ -1,24 +1,25 @@
-import styled from 'styled-components'
 import React from 'react'
+import styled from 'styled-components'
+
 import EventContent from '../Events/EventContent'
+import AdminDashboard from './AdminDashboard'
+import AdminSideBar from './AdminSideBar'
 
 const Admin = () => {
     return (
         <Container >
-            {/* <SideBar /> */}
-            <EventContent />
+            <AdminSideBar />
+            <AdminDashboard />
+
         </Container>
     )
 }
 
 
 const Container = styled.div`
-
 display: flex;
-max-width: 1300px;
 margin-left: auto;
 margin-right: auto;
-
 `
 
 
