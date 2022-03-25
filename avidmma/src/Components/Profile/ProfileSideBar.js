@@ -27,7 +27,6 @@ const ProfileSideBar = () => {
         logOut()
     }
 
-
     return (
         <Container sx={{ flex: '0.3' }}>
             <Paper elevation={0} sx={{ m: 2, display: 'flex', flexDirection: 'column' }}>

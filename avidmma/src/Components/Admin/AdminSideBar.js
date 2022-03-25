@@ -2,6 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import { Avatar, Paper, Typography, Button, Box } from '@mui/material'
 import FighterButton from './FighterButton'
+import EventButton from './EventButton'
 
 
 const AdminSideBar = () => {
@@ -30,8 +31,8 @@ const AdminSideBar = () => {
                     </Paper>
 
                     <Paper elevation={0} sx={{ display: 'flex', flexDirection: 'column', p: 4 }}>
-                        <Button variant='contained' sx={{ m: 2, p: 2 }}>Add Event</Button>
                         <FighterButton />
+                        <EventButton />
                     </Paper>
                 </Paper>
 
