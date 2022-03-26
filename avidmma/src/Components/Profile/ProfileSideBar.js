@@ -11,8 +11,7 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
 
 import useAuth from '../../Context/useAuth';
-import { signOut } from 'firebase/auth';
-import { auth } from '../../firebase';
+
 
 
 const ProfileSideBar = () => {

@@ -10,10 +10,8 @@ import TextField from '@mui/material/TextField';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
 
-import { doc, getDoc, getDocs, collection, orderBy, onSnapshot, query, where } from "firebase/firestore";
+import { doc, getDoc, getDocs, collection, orderBy, onSnapshot, query, where, updateDoc, arrayUnion } from "firebase/firestore";
 import { db } from '../../firebase'
 
 
@@ -22,6 +20,8 @@ const AdminDashboard = () => {
     const [events, setEvents] = useState([])
     const [fight, setFight] = useState([])
     const [addFighterLeft, setAddFighterLeft] = useState('')
+    const [fighterLeftInfo, setFighterLeftInfo] = useState('')
+    const [fighterRightInfo, setFighterRightInfo] = useState('')
     const [addFighterRight, setAddFighterRight] = useState('')
     const [open, setOpen] = React.useState(false);
 
@@ -68,10 +68,11 @@ const AdminDashboard = () => {
         return <Tab key={el.id} label={el.id.split('-').join(' ')} value={el.id} />
     })
 
-    const renderFights = fight.map((element) => {
+    const renderFights = fight.map((element, idx) => {
+
         return (
-            <Paper key={element.fighterLeft} sx={{ width: '100%', height: '100%', display: 'flex', justifyContent: 'space-evenly', m: 2, backgroundColor: 'rgb(218,224,230)' }} >
-                <Paper sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%', m: 3 }}>
+            <Paper key={idx} sx={{ width: '100%', height: '100%', display: 'flex', justifyContent: 'space-evenly', m: 2, backgroundColor: 'rgb(218,224,230)' }} >
+                <Paper key={element.fighterLeft} sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%', m: 3 }}>
                     <Avatar sx={{ mt: 3 }} src={element.fighterLeftImage} />
                     <Typography> {element.fighterLeft} </Typography>
                     <Typography> {element.fighterLeftRecord} </Typography>
@@ -87,29 +88,40 @@ const AdminDashboard = () => {
         )
     })
 
-    const populateFighterInfo = async (fighterName) => {
-        const docRef = doc(db, 'fighters', fighterName)
-        const docSnap = await getDoc(docRef)
-        if (docSnap.exists()) {
-            console.log('DOCUMENT DATA', docSnap.data())
-        }
-        else {
-            console.log('no doc found ')
-        }
+
+
+
+    const handleAddFighter = async (e) => {
+        const docRefLeft = doc(db, 'fighters', addFighterLeft)
+        const docSnapLeft = await getDoc(docRefLeft)
+
+        const docRefRight = doc(db, 'fighters', addFighterRight)
+        const docSnapRight = await getDoc(docRefRight)
+
+        setFighterLeftInfo(docSnapLeft.data())
+        setFighterRightInfo(docSnapRight.data())
+
+        const { name: fighterLeft, avatar: fighterLeftImage, record: fighterLeftRecord, rank: fighterLeftRank } = fighterLeftInfo
+        const { name: fighterRight, avatar: fighterRightImage, record: fighterRightRecord, rank: fighterRightRank } = fighterRightInfo
+
+        const newInfo = { fighterLeft, fighterLeftImage, fighterLeftRank, fighterLeftRecord, fighterRight, fighterRightImage, fighterLeftRecord, fighterRightRank, fighterRightRecord }
+
+        const eventRef = doc(db, 'events', value)
+
+
+        await updateDoc(eventRef, { fightCard: arrayUnion(newInfo) })
+
+
+
     }
 
-
-
-
-    const handleAddFighter = (e) => {
-
-    }
 
     const handleChangeLeft = (e) => {
         setAddFighterLeft(e.target.value)
     }
+
     const handleChangeRight = async (e) => {
-        setAddFighterLeft(e.target.value)
+        setAddFighterRight(e.target.value)
     }
 
 
@@ -125,6 +137,7 @@ const AdminDashboard = () => {
                         </Box>
                         <TabPanel value={value} sx={{}}>
                             {renderFights}
+
                             <Paper sx={{ width: '50%', m: "0 auto" }}>
                                 <Button variant='contained' onClick={handleClickOpen} sx={{ width: '100%' }}>ADD FIGHT</Button>
                             </Paper>
