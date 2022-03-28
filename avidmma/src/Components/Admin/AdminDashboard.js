@@ -118,6 +118,7 @@ const AdminDashboard = () => {
 
         await updateDoc(eventRef, { fightCard: arrayUnion(newInfo) })
         handleClose()
+        window.location.reload()
     }
 
 

@@ -2,15 +2,18 @@ import React, { useEffect, useState } from 'react'
 import TabContext from '@mui/lab/TabContext';
 import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
-import FightCard from './FightCard';
 import { doc, getDoc, getDocs, collection, setDoc } from "firebase/firestore";
 import { db } from '../../firebase'
-import { Paper, Box, B55, Avatar, Typography, Tab, Divider, Chip } from '@mui/material'
+import { Paper, Box, Avatar, Typography, Tab, Chip } from '@mui/material'
 import FavoriteBorder from '@mui/icons-material/FavoriteBorder';
 
+import useAuth from '../../Context/useAuth';
 
 
 const EventTabs = () => {
+
+    const { user } = useAuth()
+    let userInfo = { ...user }
 
     const [value, setValue] = useState("UFC-273");
     const [fight, setFight] = useState([])
@@ -27,13 +30,20 @@ const EventTabs = () => {
 
 
 
-    const likedPost = async () => {
-        await setDoc()
+    const likePost = async () => {
     }
 
     const renderTab = events.map((el, idx) => {
         return <Tab key={el.id} label={el.id.split('-').join(' ')} value={el.id} />
     })
+
+
+    const handleLikeFighter = async (e) => {
+
+        let fighter = e.target.id
+
+        await setDoc(doc(db, 'userpicks', userInfo.uid), { fight: fighter.toLowerCase().replace(' ', '-').replace(' ', '-') })
+    }
 
     const renderFights = fight.map((element, idx) => {
         return (
@@ -44,7 +54,7 @@ const EventTabs = () => {
                     <Typography variant='body1'> {element.fighterRed} </Typography>
                     <Typography variant='overline' sx={{ fontSize: '14px' }}> {element.fighterRedRecord} </Typography>
                     <Paper sx={{ display: 'flex' }} elevation={0}>
-                        <FavoriteBorder sx={{ cursor: 'pointer' }} />
+                        <FavoriteBorder onClick={handleLikeFighter} id={element.fighterRed} sx={{ cursor: 'pointer' }} />
                         <Typography>0</Typography>
                     </Paper>
                 </Paper>
@@ -59,7 +69,7 @@ const EventTabs = () => {
                     <Typography variant='body1'> {element.fighterBlue} </Typography>
                     <Typography variant='overline' sx={{ fontSize: '14px' }}> {element.fighterBlueRecord} </Typography>
                     <Paper sx={{ display: 'flex' }} elevation={0}>
-                        <FavoriteBorder sx={{ cursor: 'pointer' }} />
+                        <FavoriteBorder onClick={handleLikeFighter} id={element.fighterBlue.toLowerCase()} sx={{ cursor: 'pointer' }} />
                         <Typography >0</Typography>
                     </Paper>
                 </Paper>
