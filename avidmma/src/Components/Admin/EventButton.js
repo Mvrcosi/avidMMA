@@ -13,6 +13,12 @@ const EventButton = () => {
 
     const [open, setOpen] = useState(false);
     const [eventName, setEventName] = useState('')
+    const [addFighterRed, setAddFighterRed] = useState('')
+    const [fighterRedInfo, setFighterRedInfo] = useState('')
+    const [fighterBlueInfo, setFighterBlueInfo] = useState('')
+    const [addFighterBlue, setAddFighterBlue] = useState('')
+    const [weightClass, setWeightClass] = useState('')
+
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -26,19 +32,62 @@ const EventButton = () => {
         setEventName(e.target.value)
     }
 
+
+    const handleChangeRed = (e) => {
+        setAddFighterRed(e.target.value)
+    }
+
+    const handleChangeBlue = async (e) => {
+        setAddFighterBlue(e.target.value)
+    }
+
+    const handleChangeWeightClass = e => {
+
+        setWeightClass(e.target.value)
+    }
+
     const handleAddEvent = async (e) => {
         e.preventDefault()
 
         let eventID = eventName.split(' ').join('-').replace(':', "").replace('.', '')
+        const docRefRed = doc(db, 'fighters', addFighterRed)
+        const docSnapRed = await getDoc(docRefRed)
+
+        const docRefBlue = doc(db, 'fighters', addFighterBlue)
+        const docSnapBlue = await getDoc(docRefBlue)
+
+        setFighterRedInfo(docSnapRed.data())
+        setFighterBlueInfo(docSnapBlue.data())
+
+
+        const { name: fighterRed, avatar: fighterRedImage, record: fighterRedRecord, rank: fighterRedRank } = fighterRedInfo
+        const { name: fighterBlue, avatar: fighterBlueImage, record: fighterBlueRecord, rank: fighterBlueRank } = fighterBlueInfo
+
+
+        const fightCard = [{
+            fightID: `${fighterBlue.replace(' ', '-').replace(' ', '-').toLowerCase()}-${fighterRed.replace(' ', '-').replace(' ', '-').toLowerCase()}`,
+            weightClass: weightClass,
+            fighterBlue,
+            fighterRed,
+            fighterRedImage,
+            fighterBlueImage,
+            fighterRedRecord,
+            fighterBlueRecord,
+            fighterRedRank,
+            fighterBlueRank
+        }]
 
         try {
-            await setDoc(doc(db, 'events', eventID), { eventName })
+            await setDoc(doc(db, 'events', eventID), { eventName, fightCard })
 
         }
         catch (err) {
             console.log(err)
         }
+
+        handleClose()
     }
+
 
 
     return (
@@ -48,8 +97,7 @@ const EventButton = () => {
                 <DialogTitle sx={{ m: '0 auto' }}>Add Event</DialogTitle>
                 <DialogContent>
                     <TextField
-                        sx={{ width: '50ch' }}
-                        autoFocus
+                        sx={{}}
                         margin="dense"
                         id="name"
                         label="Event Name"
@@ -57,6 +105,39 @@ const EventButton = () => {
                         fullWidth
                         variant="outlined"
                         onChange={handleEventChange}
+                    />
+                    <TextField
+                        sx={{}}
+                        margin="dense"
+                        id="name"
+                        label="Weight Class"
+                        type="text"
+                        fullWidth
+                        variant="outlined"
+                        onChange={handleChangeWeightClass}
+
+                    />
+                    <TextField
+                        sx={{}}
+                        margin="dense"
+                        id="name"
+                        label="Main Event Fighter Red"
+                        type="text"
+                        fullWidth
+                        variant="outlined"
+                        onChange={handleChangeRed}
+
+                    />
+                    <TextField
+                        sx={{}}
+                        margin="dense"
+                        id="name"
+                        label="Main Event Fighter Blue"
+                        type="text"
+                        fullWidth
+                        variant="outlined"
+                        onChange={handleChangeBlue}
+
                     />
 
                 </DialogContent>

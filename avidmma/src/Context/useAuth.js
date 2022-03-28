@@ -30,7 +30,6 @@ export const AuthProvider = ({ children }) => {
             .catch((err) => {
                 alert(err.message)
             })
-
     }
 
     useEffect(() => {

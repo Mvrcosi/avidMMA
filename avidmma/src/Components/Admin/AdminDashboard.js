@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { Paper, Box, Button, Avatar, Typography } from '@mui/material'
-
 import Tab from '@mui/material/Tab';
 import TabContext from '@mui/lab/TabContext';
 import TabList from '@mui/lab/TabList';
@@ -11,7 +10,7 @@ import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 
-import { doc, getDoc, getDocs, collection, orderBy, onSnapshot, query, where, updateDoc, arrayUnion } from "firebase/firestore";
+import { doc, getDoc, getDocs, collection, updateDoc, arrayUnion } from "firebase/firestore";
 import { db } from '../../firebase'
 
 
@@ -19,11 +18,12 @@ const AdminDashboard = () => {
     const [value, setValue] = useState("UFC-273");
     const [events, setEvents] = useState([])
     const [fight, setFight] = useState([])
-    const [addFighterLeft, setAddFighterLeft] = useState('')
-    const [fighterLeftInfo, setFighterLeftInfo] = useState('')
-    const [fighterRightInfo, setFighterRightInfo] = useState('')
-    const [addFighterRight, setAddFighterRight] = useState('')
+    const [addFighterRed, setAddFighterRed] = useState('')
+    const [fighterRedInfo, setFighterRedInfo] = useState('')
+    const [fighterBlueInfo, setFighterBlueInfo] = useState('')
+    const [addFighterBlue, setAddFighterBlue] = useState('')
     const [open, setOpen] = React.useState(false);
+    const [weightClass, setWeightClass] = useState('')
 
 
 
@@ -51,6 +51,8 @@ const AdminDashboard = () => {
             setEvents(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })))
         }
         events()
+
+
     }, [])
 
 
@@ -59,8 +61,10 @@ const AdminDashboard = () => {
         getDoc(docRef).then((doc) => {
             setFight(doc.data().fightCard, doc.id)
         })
-
-    }, [db])
+        return () => {
+            setFight([])
+        }
+    }, [])
 
 
 
@@ -72,17 +76,17 @@ const AdminDashboard = () => {
 
         return (
             <Paper key={idx} sx={{ width: '100%', height: '100%', display: 'flex', justifyContent: 'space-evenly', m: 2, backgroundColor: 'rgb(218,224,230)' }} >
-                <Paper key={element.fighterLeft} sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%', m: 3 }}>
-                    <Avatar sx={{ mt: 3 }} src={element.fighterLeftImage} />
-                    <Typography> {element.fighterLeft} </Typography>
-                    <Typography> {element.fighterLeftRecord} </Typography>
-                    <Typography> {element.fighterLeftFavoriteCount}</Typography>
+                <Paper key={element.fighterRed} sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%', m: 3 }}>
+                    <Avatar sx={{ mt: 3 }} src={element.fighterRedImage} />
+                    <Typography> {element.fighterRed} </Typography>
+                    <Typography> {element.fighterRedRecord} </Typography>
+                    <Typography> {element.fighterRedFavoriteCount}</Typography>
                 </Paper>
-                <Paper key={element.fighterRight} sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%', m: 3 }}>
-                    <Avatar sx={{ mt: 3 }} src={element.fighterRightImage} />
-                    <Typography> {element.fighterRight} </Typography>
-                    <Typography> {element.fighterRightRecord} </Typography>
-                    <Typography> {element.fighterRightFavoriteCount}</Typography>
+                <Paper key={element.fighterBlue} sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%', m: 3 }}>
+                    <Avatar sx={{ mt: 3 }} src={element.fighterBlueImage} />
+                    <Typography> {element.fighterBlue} </Typography>
+                    <Typography> {element.fighterBlueRecord} </Typography>
+                    <Typography> {element.fighterBlueFavoriteCount}</Typography>
                 </Paper>
             </Paper >
         )
@@ -92,41 +96,46 @@ const AdminDashboard = () => {
 
 
     const handleAddFighter = async (e) => {
-        const docRefLeft = doc(db, 'fighters', addFighterLeft)
-        const docSnapLeft = await getDoc(docRefLeft)
+        const docRefRed = doc(db, 'fighters', addFighterRed)
+        const docSnapRed = await getDoc(docRefRed)
 
-        const docRefRight = doc(db, 'fighters', addFighterRight)
-        const docSnapRight = await getDoc(docRefRight)
+        const docRefBlue = doc(db, 'fighters', addFighterBlue)
+        const docSnapBlue = await getDoc(docRefBlue)
 
-        setFighterLeftInfo(docSnapLeft.data())
-        setFighterRightInfo(docSnapRight.data())
+        setFighterRedInfo(docSnapRed.data())
+        setFighterBlueInfo(docSnapBlue.data())
 
-        const { name: fighterLeft, avatar: fighterLeftImage, record: fighterLeftRecord, rank: fighterLeftRank } = fighterLeftInfo
-        const { name: fighterRight, avatar: fighterRightImage, record: fighterRightRecord, rank: fighterRightRank } = fighterRightInfo
+        const { name: fighterRed, avatar: fighterRedImage, record: fighterRedRecord, rank: fighterRedRank } = fighterRedInfo
+        const { name: fighterBlue, avatar: fighterBlueImage, record: fighterBlueRecord, rank: fighterBlueRank } = fighterBlueInfo
 
-        const newInfo = { fighterLeft, fighterLeftImage, fighterLeftRank, fighterLeftRecord, fighterRight, fighterRightImage, fighterLeftRecord, fighterRightRank, fighterRightRecord }
+        let fightID = `${fighterRed.replace(' ', '-').replace(' ', '-')}-${fighterBlue.replace(' ', '-').replace(' ', '-')}`
+        fightID.toLowerCase()
+
+        const newInfo = { weightClass: weightClass, fightID, fighterRed, fighterRedImage, fighterRedRank, fighterRedRecord, fighterBlue, fighterBlueImage, fighterBlueRank, fighterBlueRecord }
 
         const eventRef = doc(db, 'events', value)
 
 
         await updateDoc(eventRef, { fightCard: arrayUnion(newInfo) })
-
-
-
+        handleClose()
     }
 
 
-    const handleChangeLeft = (e) => {
-        setAddFighterLeft(e.target.value)
+    const handleChangeRed = (e) => {
+        setAddFighterRed(e.target.value)
     }
 
-    const handleChangeRight = async (e) => {
-        setAddFighterRight(e.target.value)
+    const handleChangeBlue = async (e) => {
+        setAddFighterBlue(e.target.value)
     }
 
+    const handleChangeWeightClass = e => {
+
+        setWeightClass(e.target.value)
+    }
 
     return (
-        <Container sx={{}}>
+        <Container >
             <Paper sx={{ m: 2, display: 'flex', flexDirection: 'column' }}>
                 <Box sx={{ width: '100%', typography: 'body1' }}>
                     <TabContext value={value}>
@@ -135,7 +144,7 @@ const AdminDashboard = () => {
                                 {renderTab}
                             </TabList>
                         </Box>
-                        <TabPanel value={value} sx={{}}>
+                        <TabPanel value={value}>
                             {renderFights}
 
                             <Paper sx={{ width: '50%', m: "0 auto" }}>
@@ -155,7 +164,7 @@ const AdminDashboard = () => {
                         type="text"
                         variant="outlined"
                         sx={{ mr: 2 }}
-                        onChange={handleChangeLeft}
+                        onChange={handleChangeRed}
                     />
                     <TextField
                         margin="dense"
@@ -164,11 +173,24 @@ const AdminDashboard = () => {
                         type="text"
                         variant="outlined"
                         sx={{ ml: 2 }}
-                        onChange={handleChangeRight}
-
+                        onChange={handleChangeBlue}
                     />
 
+
                 </DialogContent>
+
+                <DialogContent>
+                    <TextField
+                        margin="dense"
+                        id="weightClass"
+                        label="Weight Class"
+                        type="text"
+                        variant="outlined"
+                        fullWidth
+                        onChange={handleChangeWeightClass}
+                    />
+                </DialogContent>
+
                 <DialogActions>
                     <Button onClick={handleAddFighter}>Add Card</Button>
                 </DialogActions>

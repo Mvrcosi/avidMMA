@@ -57,11 +57,11 @@ const FighterButton = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault()
-        let fighterID = fullName.replace(' ', '-').toLocaleLowerCase()
+        let fighterID = fullName.replace(' ', '-').replace(' ', '-')
         const fighter = { name: fullName, rank: rank, avatar: image, record: record, weightClass: weightClass }
 
         try {
-            await setDoc(doc(db, 'fighters', fighterID), fighter)
+            await setDoc(doc(db, 'fighters', fighterID.toLocaleLowerCase()), fighter)
             handleClickAlert()
         }
         catch (err) {
