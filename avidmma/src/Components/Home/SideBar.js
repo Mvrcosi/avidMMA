@@ -22,12 +22,12 @@ const Sidebar = () => {
 
                 <Divider sx={{ ml: 3, mr: 3 }}> <Typography variant='overline'>Join below</Typography></Divider>
                 <Paper elevation={0} sx={{ display: 'flex', flexDirection: 'column', m: 1 }}>
-                    <EmailSignUp />
+                    {/* <EmailSignUp /> */}
                     <GoogleButton />
                     <TwitterButton />
                 </Paper>
-                <Divider sx={{ ml: 3, mr: 3 }}> <Typography variant='overline'>Or</Typography></Divider>
-                <EmailSignIn />
+                {/* <Divider sx={{ ml: 3, mr: 3 }}> <Typography variant='overline'>Or</Typography></Divider>
+                <EmailSignIn /> */}
             </Paper>
 
 

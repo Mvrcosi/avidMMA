@@ -2,13 +2,11 @@ import React, { useEffect, useState } from 'react'
 import TabContext from '@mui/lab/TabContext';
 import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
-import { doc, getDoc, getDocs, collection, setDoc, query, where, snapshotEqual, onSnapshot, updateDoc, arrayUnion, deleteDoc } from "firebase/firestore";
+import { doc, getDoc, getDocs, collection, setDoc, query, where, onSnapshot, updateDoc, arrayUnion, deleteDoc, deleteField } from "firebase/firestore";
 import { db } from '../../firebase'
 import { Paper, Box, Avatar, Typography, Tab, Chip } from '@mui/material'
 import FavoriteBorder from '@mui/icons-material/FavoriteBorder';
 import FavoriteIcon from '@mui/icons-material/Favorite';
-
-
 import useAuth from '../../Context/useAuth';
 
 
@@ -21,7 +19,7 @@ const EventTabs = () => {
     const [fight, setFight] = useState([])
     const [events, setEvents] = useState([])
     const [likes, setLikes] = useState([])
-    const [liked, setLiked] = useState(false)
+    const [hasLiked, setHasLiked] = useState(false)
 
     const handleChange = async (event, newValue) => {
         setValue(newValue)
@@ -32,67 +30,44 @@ const EventTabs = () => {
     };
 
 
-    const likePost = async (e) => {
+    const likeFighter = async (e) => {
 
-        if (liked) {
+        const docRef = doc(db, 'userpicks', value)
+        const docSnap = await getDoc(docRef)
+
+        const picksRef = doc(db, 'picks', value)
+        const pickSnap = await getDoc(picksRef)
+
+
+
+        let fighterID = e.target.id.toLowerCase().replace(' ', '-').replace(' ', '-')
+
+        if (hasLiked) {
             await deleteDoc(doc(db, 'picks', value, 'likes', userInfo.uid))
         }
         else {
-            await setDoc(doc(db, 'picks', value, "likes", userInfo.uid), {
-                fighter: e.target.id
-            })
+            if (fighterID !== ' ') {
+                await setDoc(doc(db, 'picks', value, 'likes', userInfo.uid), {
+                    username: userInfo.uid
+                })
+            }
         }
     }
 
 
+    useEffect(() => onSnapshot(collection(db, 'picks', value, 'likes'), (snapshot) =>
+        setLikes(snapshot.docs)
+    ), [db, value])
 
-    useEffect(
-        () => onSnapshot(collection(db, 'picks', value, 'likes'), (snapshot) =>
-            setLikes(snapshot.docs)
-        ),
-        [db, value]
-    )
+
 
     useEffect(
         () =>
-            setLiked(
-                (likes.findIndex((like) => like.id === userInfo.uid) !== -1)
-            ), [likes]
+            setHasLiked(
+                likes.findIndex((like) => like.id === userInfo.uid) !== -1
+            ),
+        [likes]
     )
-
-    // const handleLikeFighter = async (e) => {
-
-    //     const docRef = doc(db, 'userpicks', value)
-    //     const docSnap = await getDoc(docRef)
-
-    //     const picksRef = doc(db, 'pick', value)
-    //     const pickSnap = await getDoc(picksRef)
-
-    //     let fighter = e.target.id
-
-    //     let pick = [
-    //         { fighterID: fighter.toLowerCase().replace(' ', '-').replace(' ', '-') }
-    //     ]
-
-    //     let picks = [
-
-    //     ]
-
-
-    //     if (!docSnap.exists()) {
-    //         await setDoc(doc(db, 'userpicks', value), { pick })
-    //         await setDoc(doc(db, 'picks', value), {})
-    //     }
-    //     else {
-    //         if (fighter !== '') {
-    //             await updateDoc(doc(db, 'userpicks', value), { pick: arrayUnion({ fighterID: fighter.toLowerCase().replace(' ', '-').replace(' ', '-') }) })
-    //         }
-    //     }
-    // }
-    const renderTab = events.map((el, idx) => {
-        return <Tab key={el.id} label={el.id.split('-').join(' ')} value={el.id} />
-    })
-
 
 
     const renderFights = fight.map((element, idx) => {
@@ -105,14 +80,14 @@ const EventTabs = () => {
                     <Typography variant='overline' sx={{ fontSize: '14px' }}> {element.fighterRedRecord} </Typography>
                     <Paper sx={{ display: 'flex' }} elevation={0} name={element.fightID}>
 
-                        {liked ? (
-                            <FavoriteIcon onClick={likePost} id={element.fighterRed} className={element.fightID} name={element.fightID} sx={{ cursor: 'pointer', color: 'red' }} />
-                        ) : (
-                            <FavoriteBorder onClick={likePost} id={element.fighterRed} className={element.fightID} name={element.fightID} sx={{ cursor: 'pointer' }} />
+                        {hasLiked ?
+                            <FavoriteIcon id={element.fighterRed} onClick={likeFighter} sx={{ cursor: 'pointer', color: 'red' }} /> :
+                            <FavoriteBorder id={element.fighterRed} onClick={likeFighter} sx={{ cursor: 'pointer' }} />
+                        }
+                        {likes.length > 0 && (
+                            <Typography>{likes.length}</Typography>)
+                        }
 
-                        )}
-
-                        <Typography>0</Typography>
                     </Paper>
                 </Paper>
                 <Paper elevation={0} sx={{ width: '10%', display: 'flex', flexDirection: 'column', mt: 3, mb: 3, justifyContent: 'space-evenly', alignItems: 'center' }} >
@@ -126,18 +101,21 @@ const EventTabs = () => {
                     <Typography variant='body1'> {element.fighterBlue} </Typography>
                     <Typography variant='overline' sx={{ fontSize: '14px' }}> {element.fighterBlueRecord} </Typography>
                     <Paper sx={{ display: 'flex' }} elevation={0}>
-                        {liked ? (
-                            <FavoriteIcon onClick={likePost} id={element.fighterRed} className={element.fightID} name={element.fightID} sx={{ cursor: 'pointer', color: 'red' }} />
-                        ) : (
-                            <FavoriteBorder onClick={likePost} id={element.fighterRed} className={element.fightID} name={element.fightID} sx={{ cursor: 'pointer' }} />
-
-                        )}
-
-                        <Typography >0</Typography>
+                        {hasLiked ?
+                            <FavoriteIcon id={element.fighterBlue} onClick={likeFighter} sx={{ cursor: 'pointer', color: 'red' }} /> :
+                            <FavoriteBorder id={element.fighterBlue} onClick={likeFighter} sx={{ cursor: 'pointer' }} />
+                        }
+                        {likes.length > 0 && (
+                            <Typography>{likes.length}</Typography>)
+                        }
                     </Paper>
                 </Paper>
             </Paper>
         )
+    })
+
+    const renderTab = events.map((el, idx) => {
+        return <Tab key={el.id} label={el.id.split('-').join(' ')} value={el.id} />
     })
 
 

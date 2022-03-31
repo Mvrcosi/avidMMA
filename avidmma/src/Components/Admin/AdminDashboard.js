@@ -51,8 +51,6 @@ const AdminDashboard = () => {
             setEvents(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })))
         }
         events()
-
-
     }, [])
 
 
