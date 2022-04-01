@@ -11,11 +11,19 @@ const Profile = () => {
   const { user, logIn } = useAuth()
 
 
+
   useEffect(() => {
     if (!user) {
       return navigate('/')
     }
   })
+
+  useEffect(() => {
+    if (!user) {
+      return
+    }
+    document.title = `avidMMA - ${user.displayName}`
+  }, [])
 
   return (
     <Container >

@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useEffect, useState } from 'react'
-import { signInWithPopup, GoogleAuthProvider, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged } from "firebase/auth";
+import { TwitterAuthProvider, signInWithPopup, GoogleAuthProvider, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged } from "firebase/auth";
 import { auth } from '../firebase'
 
 const authContext = createContext({})
@@ -21,6 +21,17 @@ export const AuthProvider = ({ children }) => {
         return createUserWithEmailAndPassword(auth, email, password)
     }
 
+    function twitterSignIn() {
+        const provider = new TwitterAuthProvider();
+        signInWithPopup(auth, provider)
+            .then((res) => {
+                setUser(res.user)
+            })
+            .catch((err) => {
+                console.log(err.message)
+            })
+    }
+
     function googleSignIn() {
         const provider = new GoogleAuthProvider();
         signInWithPopup(auth, provider)
@@ -28,7 +39,7 @@ export const AuthProvider = ({ children }) => {
                 setUser(res.user)
             })
             .catch((err) => {
-                alert(err.message)
+                console(err.message)
             })
     }
 
@@ -47,7 +58,7 @@ export const AuthProvider = ({ children }) => {
     }
 
     return (
-        <authContext.Provider value={{ user, logIn, logOut, emailSignUp, googleSignIn }}>
+        <authContext.Provider value={{ user, logIn, logOut, emailSignUp, googleSignIn, twitterSignIn }}>
             {children}
         </authContext.Provider>
     )
@@ -56,6 +67,6 @@ export const AuthProvider = ({ children }) => {
 
 export default function useAuth() {
 
-    const { user, logIn, logOut, emailSignIn, emailSignUp, googleSignIn } = useContext(authContext)
-    return { user, logIn, logOut, emailSignIn, emailSignUp, googleSignIn }
+    const { user, logIn, logOut, emailSignIn, emailSignUp, googleSignIn, twitterSignIn } = useContext(authContext)
+    return { user, logIn, logOut, emailSignIn, emailSignUp, googleSignIn, twitterSignIn }
 }

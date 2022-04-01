@@ -2,19 +2,13 @@
 import React, { useEffect, useState } from 'react'
 
 import { Avatar, Button, Container, Divider, Paper, Typography, Input } from '@mui/material'
-import AddCircleIcon from '@mui/icons-material/AddCircle';
-import HomeIcon from '@mui/icons-material/Home';
-import MailOutlineIcon from '@mui/icons-material/MailOutline';
 import SportsMmaIcon from '@mui/icons-material/SportsMma';
-import PersonIcon from '@mui/icons-material/Person';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import TextField from '@mui/material/TextField';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import useAuth from '../../Context/useAuth';
 
 import { db } from '../../firebase';
@@ -33,6 +27,9 @@ const ProfileSideBar = () => {
     const handleClickOpen = () => {
         setOpen(true);
     };
+
+  
+
 
     const handleClose = () => {
         setOpen(false);
@@ -69,16 +66,17 @@ const ProfileSideBar = () => {
     return (
         <Container sx={{ flex: '0.3', }} >
             <Paper elevation={0} sx={{ m: 2, display: 'flex', flexDirection: 'column', }}>
-
+                <Typography variant='h2' sx={{ textAlign: 'center', fontFamily: 'Courgette', m: 2 }}>
+                    AvidMMA
+                </Typography>
                 <Paper elevation={0} sx={{ width: '90%', display: 'flex', flexDirection: 'column', alignItems: 'center', m: "0px auto", mt: 3, pt: 5, pb: 5, backgroundColor: 'rgb(218, 224, 230)' }}>
 
-                    {user && userInfo.photoURL ? <Avatar onClick={handleClickOpen} sx={{ p: 1, backgroundColor: 'white', cursor: 'pointer' }} src={user.photoURL} /> : <Avatar sx={{ p: 1 }} src='https://st3.depositphotos.com/6672868/13701/v/600/depositphotos_137014128-stock-illustration-user-profile-icon.jpg' />}
+                    {user && userInfo.photoURL ? <Avatar onClick={handleClickOpen} sx={{ cursor: 'pointer', width: '50px', height: '50px' }} src={user.photoURL} /> : <Avatar sx={{ p: 1 }} style={{ borderRadius: '10px' }} src='https://st3.depositphotos.com/6672868/13701/v/600/depositphotos_137014128-stock-illustration-user-profile-icon.jpg' />}
 
                     {user && user.displayName ? <Typography variant="h6" >
                         {user.displayName}
                     </Typography> : <Typography>UNDEFINED</Typography>}
 
-                    {user && user.userName ? <Typography variant='caption' > @{user.userName} </Typography> : <Typography> USERNAME</Typography>}
 
 
                 </Paper>
@@ -86,8 +84,15 @@ const ProfileSideBar = () => {
 
                 <Button sx={{ p: 2, color: 'black' }}> <SportsMmaIcon sx={{ mr: 1 }} />Picks</Button>
 
+                {user && user.uid === 'yOrlg8xrQMMAuHiu5SuwCzyQwdu1' ? <Button href='http://localhost:3000/admin'  >
+                    admin panel
+                </Button> : <Button sx={{ display: 'none' }} href='http://localhost:3000/'  >
+                    admin panel
+                </Button>}
+
 
                 <Button sx={{ p: 2, color: 'black' }} onClick={logOut}> <ArrowBackIcon /> Sign out</Button>
+
                 <Divider sx={{ m: 1, ml: 3, mr: 3 }} />
                 <Typography variant='overline' sx={{ textAlign: 'center', mt: 0, mb: 1 }}>joined Mar, 2022</Typography>
 

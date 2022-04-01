@@ -74,7 +74,9 @@ const EventButton = () => {
             fighterRedRecord,
             fighterBlueRecord,
             fighterRedRank,
-            fighterBlueRank
+            fighterBlueRank,
+            fightStatus: 'upcoming',
+            winner: null
         }]
 
         try {

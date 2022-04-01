@@ -17,7 +17,6 @@ const GoogleButton = () => {
     const signInWithGoogle = async () => {
         googleSignIn()
         navigate('/profile')
-
     }
 
 

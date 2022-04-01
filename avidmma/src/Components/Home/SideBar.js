@@ -15,7 +15,10 @@ const Sidebar = () => {
     return (
         <Container sx={{ flex: '0.3' }}>
             <Paper sx={{ m: 2, display: 'flex', flexDirection: 'column' }}>
-                <img src='https://www.posenfoundation.co.il/wp-content/uploads/2019/02/logo-placeholder-png-3.png' />
+                {/* <img src='https://www.posenfoundation.co.il/wp-content/uploads/2019/02/logo-placeholder-png-3.png' /> */}
+                <Typography variant='h2' sx={{ textAlign: 'center', fontFamily: 'Courgette', m: 3 }}>
+                    AvidMMA
+                </Typography>
                 <Typography variant='overline' sx={{ textAlign: 'center', fontSize: '20px' }}>
                     Start Tracking Your Picks!
                 </Typography>
@@ -31,7 +34,7 @@ const Sidebar = () => {
             </Paper>
 
 
-        </Container>
+        </Container >
     )
 }
 

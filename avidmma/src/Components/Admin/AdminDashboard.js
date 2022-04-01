@@ -13,8 +13,15 @@ import DialogContent from '@mui/material/DialogContent';
 import { doc, getDoc, getDocs, collection, updateDoc, arrayUnion } from "firebase/firestore";
 import { db } from '../../firebase'
 
+import useAuth from '../../Context/useAuth'
+
 
 const AdminDashboard = () => {
+
+
+
+
+
     const [value, setValue] = useState("UFC-273");
     const [events, setEvents] = useState([])
     const [fight, setFight] = useState([])
@@ -109,7 +116,7 @@ const AdminDashboard = () => {
         let fightID = `${fighterRed.replace(' ', '-').replace(' ', '-')}-${fighterBlue.replace(' ', '-').replace(' ', '-')}`
         fightID.toLowerCase()
 
-        const newInfo = { weightClass: weightClass, fightID, fighterRed, fighterRedImage, fighterRedRank, fighterRedRecord, fighterBlue, fighterBlueImage, fighterBlueRank, fighterBlueRecord }
+        const newInfo = { weightClass: weightClass, fightID, fighterRed, fighterRedImage, fighterRedRank, fighterRedRecord, fighterBlue, fighterBlueImage, fighterBlueRank, fighterBlueRecord, fightStatus: 'upcoming', winner: null }
 
         const eventRef = doc(db, 'events', value)
 

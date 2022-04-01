@@ -20,6 +20,12 @@ const Home = () => {
         }
     })
 
+    useEffect(() => {
+
+        document.title = 'avidMMA - Home'
+    }, [])
+
+
     return (
         <Container>
 
