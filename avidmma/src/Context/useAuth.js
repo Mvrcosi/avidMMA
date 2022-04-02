@@ -17,9 +17,6 @@ export const AuthProvider = ({ children }) => {
         return signOut(auth)
     }
 
-    function emailSignUp(email, password) {
-        return createUserWithEmailAndPassword(auth, email, password)
-    }
 
     function twitterSignIn() {
         const provider = new TwitterAuthProvider();
@@ -39,7 +36,7 @@ export const AuthProvider = ({ children }) => {
                 setUser(res.user)
             })
             .catch((err) => {
-                console(err.message)
+                console.log(err.message)
             })
     }
 
@@ -53,12 +50,9 @@ export const AuthProvider = ({ children }) => {
         }
     }, [])
 
-    function emailSignIn(email, password) {
-        return signInWithEmailAndPassword(auth, email, password)
-    }
 
     return (
-        <authContext.Provider value={{ user, logIn, logOut, emailSignUp, googleSignIn, twitterSignIn }}>
+        <authContext.Provider value={{ user, logIn, logOut, googleSignIn, twitterSignIn }}>
             {children}
         </authContext.Provider>
     )
@@ -67,6 +61,6 @@ export const AuthProvider = ({ children }) => {
 
 export default function useAuth() {
 
-    const { user, logIn, logOut, emailSignIn, emailSignUp, googleSignIn, twitterSignIn } = useContext(authContext)
-    return { user, logIn, logOut, emailSignIn, emailSignUp, googleSignIn, twitterSignIn }
+    const { user, logIn, logOut, googleSignIn, twitterSignIn } = useContext(authContext)
+    return { user, logIn, logOut, googleSignIn, twitterSignIn }
 }

@@ -2,9 +2,9 @@ import React, { useEffect, useState } from 'react'
 import TabContext from '@mui/lab/TabContext';
 import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
-import { doc, getDoc, getDocs, collection, setDoc, query, where, onSnapshot, updateDoc, addDoc, arrayUnion, deleteDoc, deleteField, QuerySnapshot, DocumentSnapshot } from "firebase/firestore";
+import { doc, getDoc, getDocs, collection, query, where, onSnapshot, updateDoc, addDoc, QuerySnapshot, DocumentSnapshot } from "firebase/firestore";
 import { db } from '../../firebase'
-import { Paper, Box, Avatar, Typography, Tab, Chip, Button } from '@mui/material'
+import { Paper, Box, Avatar, Typography, Tab, Chip } from '@mui/material'
 import FavoriteBorder from '@mui/icons-material/FavoriteBorder';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import pull from 'lodash/pull';
@@ -15,20 +15,20 @@ import CloseIcon from '@mui/icons-material/Close';
 import useAuth from '../../Context/useAuth';
 
 
-function getFighterIdFromName(name) {
-    return name.toLowerCase().replace(' ', '-').replace(' ', '-')
-}
 
 const EventTabs = () => {
 
     const { user } = useAuth()
-    let userInfo = { ...user }
 
     const [eventName, setEventName] = useState("UFC-273");
     const [fightCards, setFightCards] = useState([])
     const [events, setEvents] = useState([])
     const [openAlert, setOpenAlert] = useState(false);
 
+
+    function getFighterIdFromName(name) {
+        return name.toLowerCase().replace(' ', '-').replace(' ', '-')
+    }
 
     const handleCloseAlert = (event, reason) => {
         if (reason === 'clickaway') {
@@ -80,10 +80,12 @@ const EventTabs = () => {
 
     const likeFighter = async (e) => {
 
+
         if (!user) {
             handleClickAlert()
+        }
 
-        } else {
+        else {
 
             const btn = e.target.closest('.fighterBtn');
             const fighterName = (btn || e.target).getAttribute('data-fighter-name');
