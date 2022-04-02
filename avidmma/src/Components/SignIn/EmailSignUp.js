@@ -3,7 +3,6 @@ import { Button, Alert, Stack, Typography, Dialog, DialogActions, DialogContent,
 import MailIcon from '@mui/icons-material/Mail';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import AlternateEmailIcon from '@mui/icons-material/AlternateEmail';
-import { auth } from '../../firebase';
 import useAuth from '../../Context/useAuth';
 
 const EmailSignUp = () => {

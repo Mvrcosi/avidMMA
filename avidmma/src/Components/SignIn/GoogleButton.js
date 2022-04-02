@@ -1,7 +1,5 @@
 import React, { useContext } from 'react'
 import { Button } from '@mui/material'
-import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
-import { auth } from '../../firebase'
 import { useNavigate } from "react-router-dom";
 import useAuth from '../../Context/useAuth';
 

@@ -1,44 +1,29 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app), using the [Redux](https://redux.js.org/) and [Redux Toolkit](https://redux-toolkit.js.org/) template.
+# avidMMA
+avidMMA is a one stop shop for hardcore MMA fans to make predictions and compare amongst friends. The goal is to obtain the users prediction pre-fight, and rank thier prediction to portray the users knowledge of the sport, though some luck does play a part. 
 
-## Available Scripts
+Users are able predict the outcome of a fight and will rank them along with their friends based on an alogrithm of who has guessed the most correct for a particular event, week, or maybe even month. 
 
-In the project directory, you can run:
 
-### `npm start`
+# Login/Sign Up
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+The login/signup process has been made easy and secure with the help of firebase's authentication which makes the process a breeze. Not only that, but increases a measure of security which google takes care of in the back-end.
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+There is an additional login/sign up feature that includes twitter. Users are able to authenticate and sign up via twitter which comes with increased security that traditioal email/password can't provide off the bat.
 
-### `npm test`
+# In App
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Users will be able to predict fight outcomes only up until the day before of the event. After that, an algorithm we've written will disable the function to pick or even switch fighter choices to avoid "cheating". 
 
-### `npm run build`
+User are also able to interact with their friends and come together in a sort of community, all built around MMA and thier love for it. 
 
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
+# Profile
 
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
+Users have preset profile according to their credentials (google/twitter) they have chosen to login with, but also have the option to change an image or display name if they decide to. 
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+# Technologies
+-React
+-Firebase Google Cloud
+-Material UI
+-Styled Components
+-Lodash
